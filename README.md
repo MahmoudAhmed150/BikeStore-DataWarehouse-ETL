@@ -1,60 +1,54 @@
-# 🚲 Bike Store Data Warehouse: End-to-End BI Solution
+# 🚲 Bike Store End-to-End BI & Data Warehouse Project
 
-This project demonstrates a full Business Intelligence lifecycle, transforming raw OLTP data into an optimized Data Warehouse (DWH) for strategic decision-making.
+This project transforms raw transactional data from a Bike Store OLTP system into a structured Data Warehouse (DWH) designed for advanced business analytics. 
 
 ---
 
-## 🏗️ 1. Architecture & Design
+## 🏗️ 1. Project Architecture
 
 ### Source System (OLTP)
-The source is a relational database representing a Bike Store with 8 interrelated tables.
-![Physical Model](Screenshots/image2.jpeg)
+[cite_start]The source consists of 8 tables capturing sales, inventory, and operations[cite: 13].
+![Source System Model](Images/Screenshot%202026-05-10%20183419.png)
 
 ### Data Warehouse Design (Galaxy Schema)
-I implemented a **Galaxy Schema** to handle multiple business processes (Sales, Inventory). It consists of:
-- **3 Fact Tables:** Sales, Orders, and Inventory.
-- **6 Dimensions:** Including Time, Staff, Customer, and Product dimensions.
-![DWH Model](Screenshots/image10.jpeg)
+[cite_start]I designed a **Galaxy Schema** consisting of **3 Fact Tables** sharing conformed dimensions to provide cross-functional insights[cite: 31, 34]:
+- [cite_start]**Fact_Sales:** Transactional grain (individual items)[cite: 23, 25].
+- [cite_start]**Fact_Orders:** Order-level summary[cite: 23].
+- [cite_start]**Fact_Inventory:** Periodic snapshot of stock levels[cite: 23, 25].
+
+![Galaxy Schema Model](Images/Screenshot%202026-05-10%20183543.png)
 
 ---
 
-## 🛠️ 2. ETL Process (SSIS)
+## 🛠️ 2. ETL Framework (SSIS)
 
-The ETL (Extract, Transform, Load) process was built using **SQL Server Integration Services (SSIS)**.
+[cite_start]The ETL pipeline was developed using **SQL Server Integration Services (SSIS)** to manage two main stages[cite: 41]:
+1. [cite_start]**Source to STG:** Raw extraction into a staging layer[cite: 42].
+2. [cite_start]**STG to DWH:** Transformation and loading with **SCD Type 2** implementation for `Dim_Staff` and `Dim_Customer` to maintain historical records[cite: 43, 87, 102].
 
-### Data Flow Strategy:
-1. **Staging Area:** Data is extracted from OLTP to a Staging (STG) database to minimize load on production.
-2. **SCD Type 2:** Implemented **Slowly Changing Dimensions (Type 2)** for `Dim_Staff` and `Dim_Customer` to track historical changes (e.g., staff moving between stores).
-3. **Surrogate Keys:** Used for all dimensions to ensure data integrity.
-
-![SSIS Package](Screenshots/image15.jpeg)
-*Example of the Control Flow and Data Flow for loading dimensions.*
+![ETL Control Flow](Images/Screenshot%202026-05-10%20183600.png)
+[cite_start]*Automated ETL execution flows built for high reliability[cite: 195, 210].*
 
 ---
 
-## 📈 3. Data Analysis & Insights (Power BI)
+## 📈 3. Data Insights & Visualization
 
-The final layer is an interactive Power BI Dashboard that provides key business metrics:
-- **Total Revenue:** $7.69M
-- **Units Sold:** 14K
-- **Top Sales Staff:** Marcelene Boyer ($2.62M).
+[cite_start]Leveraging the DWH, I built an interactive **Power BI Dashboard** to monitor performance[cite: 212]:
+- [cite_start]**Key Metrics:** $7.69M Total Sales, 14K Units Sold[cite: 215, 216].
+- [cite_start]**Insights:** Identified **Trek Slash 8** as the top revenue generator ($555,558)[cite: 148].
+- [cite_start]**Staff Performance:** Ranked **Marcelene Boyer** as the top seller with $2.6M in revenue[cite: 157].
 
-![Power BI Dashboard](Screenshots/image28.jpeg)
-
-### Key Analytical Queries:
-- Analysis of sales performance by Category (Cruisers Bicycles being #1).
-- Monthly trends identifying January as the peak revenue month.
+![Power BI Dashboard](Images/Screenshot%202026-05-10%20192523.png)
 
 ---
 
-## ⚙️ 4. Automation & Deployment
-- **SQL Server Agent:** Scheduled jobs to automate the ETL pipeline daily.
-- **SQL Scripts:** All DDL and DML scripts are provided in the `/SQL` directory.
+## ⚙️ 4. Automation & Maintenance
+- [cite_start]**Scheduled Jobs:** Configured a **SQL Server Agent Job** named `Run_ETL_Packages` to refresh the data automatically every day at midnight[cite: 195, 198, 204].
+- [cite_start]**Referential Integrity:** Enforced via foreign key constraints between all Fact and Dimension tables[cite: 39].
 
 ---
 
-## 🚀 How to Run
-1. Clone the repository.
-2. Run the SQL scripts in `/SQL` to set up the DWH.
-3. Open the SSIS packages in Visual Studio to execute the ETL.
-4. Open the `.pbix` file in Power BI Desktop to view the dashboard.
+## 🚀 How to Explore
+1. [cite_start]**SQL Scripts:** Check `/SQL` for DDL, DML, and Analytical Queries[cite: 143].
+2. [cite_start]**ETL Packages:** Explore `/SSIS` for the `.dtsx` package logic[cite: 41].
+3. [cite_start]**Visualization:** Open the `.pbix` file in `/Power BI`[cite: 212].
